@@ -27,7 +27,7 @@ Source1:        autoyast_en_html.tar.bz2
 BuildRequires:  update-desktop-files
 BuildRequires:  yast2-devtools >= 3.1.15
 # control.rng
-BuildRequires:  yast2-installation-control
+BuildRequires:  yast2-installation-control >= 3.2.6
 # xmllint
 BuildRequires:  libxml2-tools
 # xsltproc for AutoinstClass
