@@ -23,6 +23,11 @@ SYMBOL =
 LIST =
   attribute config:type { "list" }
 
+ANY =
+  (
+    BOOLEAN | INTEGER | SYMBOL | LIST | text
+  )
+
 # this is useful for testing
 Anything =
   (
