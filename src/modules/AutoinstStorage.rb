@@ -56,7 +56,6 @@ module Yast
       # general/storage settings
       self.general_settings = {}
 
-      Yast.include self, "autoinstall/autopart.rb"
       Yast.include self, "autoinstall/autoinst_dialogs.rb"
     end
 
@@ -208,89 +207,6 @@ module Yast
       end
       summary = Summary.CloseList(summary)
       summary
-    end
-
-    # Moved here from RootPart module (used just by this module)
-    def SetFormatPartitions(fstabpart)
-# storage-ng
-=begin
-      fstabpart = deep_copy(fstabpart)
-      # All storage devices
-      target_map = Storage.GetTargetMap
-
-      # all activated
-      tmp = Builtins.filter(RootPart.GetActivated) do |e|
-        Ops.get_string(e, :type, "") == "mount" ||
-          Ops.get_string(e, :type, "") == "swap"
-      end
-
-      Builtins.foreach(tmp) do |e|
-        mntpt = Ops.get_string(e, :type, "") == "swap" ?
-          "swap" :
-          Ops.get_string(e, :mntpt, "")
-        part = Ops.get_string(e, :device, "")
-        p = {}
-        Builtins.foreach(fstabpart) do |pp|
-          # mountpoint matches
-          if Ops.get_string(pp, "mount", "") == mntpt
-            p = deep_copy(pp)
-            raise Break
-          end
-        end
-        mount_options = ""
-        Builtins.foreach(Storage.ReadFstab(Installation.destdir)) do |entry|
-          if Ops.get_string(entry, "file", "") == mntpt
-            mount_options = Ops.get_string(entry, "mntops", "")
-            raise Break
-          end
-        end
-        target_map = Storage.SetPartitionData(target_map, part, "mount", mntpt)
-        target_map = Storage.SetPartitionData(
-          target_map,
-          part,
-          "format",
-          Ops.get_boolean(p, "format", false)
-        )
-        target_map = Storage.SetPartitionData(target_map, part, "delete", false)
-        target_map = Storage.SetPartitionData(target_map, part, "create", false)
-        if Builtins.haskey(p, "filesystem")
-          target_map = Storage.SetPartitionData(
-            target_map,
-            part,
-            "filesystem",
-            Ops.get_symbol(p, "filesystem", :ext4)
-          )
-        end
-        if Ops.greater_than(Builtins.size(mount_options), 0) &&
-            !Builtins.haskey(p, "fstopt")
-          target_map = Storage.SetPartitionData(
-            target_map,
-            part,
-            "fstopt",
-            mount_options
-          )
-        end
-        if Builtins.haskey(p, "fstopt")
-          target_map = Storage.SetPartitionData(
-            target_map,
-            part,
-            "fstopt",
-            Ops.get_string(p, "fstopt", "")
-          )
-        end
-        if Builtins.haskey(p, "mountby")
-          target_map = Storage.SetPartitionData(
-            target_map,
-            part,
-            "mountby",
-            Ops.get_symbol(p, "mountby", :device)
-          )
-        end
-      end
-
-      Storage.SetTargetMap(target_map)
-=end
-      true
     end
 
     # Handle /etc/fstab usage
